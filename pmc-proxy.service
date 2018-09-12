@@ -1,0 +1,11 @@
+[Unit]
+Description=PMC data proxy from MQTT to InfluxDB
+
+[Service]
+Environment=PYTHONUNBUFFERED=true
+ExecStart=/home/administrator/pmc-mqtt-influxdb-proxy/proxy
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
