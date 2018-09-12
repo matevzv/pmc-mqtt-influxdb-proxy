@@ -9,7 +9,7 @@ def on_connect(client, userdata, flags, rc):
     mqtt.subscribe("pmc/+")
 
 def on_message(mqtt, userdata, msg):
-    data = json.loads(msg.payload)
+    data = json.loads(msg.payload.decode('utf-8'))
     node_id = data["node_id"]
     ts = data["ts"]
     del data["node_id"]
