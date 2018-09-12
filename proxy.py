@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import json
 import paho.mqtt.client as mqtt
 from influxdb import InfluxDBClient
@@ -27,7 +29,7 @@ mqtt = mqtt.Client()
 mqtt.on_connect = on_connect
 mqtt.on_message = on_message
 
-mqtt.connect("193.2.205.66")
+mqtt.connect("localhost")
 influxdb = InfluxDBClient('metrum.ijs.si', 8086, 'pmc', 'PMC.meritve.param', 'pmc')
 
 mqtt.loop_forever()
