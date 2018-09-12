@@ -4,11 +4,11 @@ import json
 import paho.mqtt.client as mqtt
 from influxdb import InfluxDBClient
 
-def on_connect(client, userdata, flags, rc):
+def on_connect(mqttc, userdata, flags, rc):
     print("Connected with result code "+str(rc))
-    mqtt.subscribe("pmc/+")
+    mqttc.subscribe("pmc/+")
 
-def on_message(mqtt, userdata, msg):
+def on_message(mqttc, userdata, msg):
     data = json.loads(msg.payload.decode('utf-8'))
     node_id = data["node_id"]
     ts = data["ts"]
@@ -25,11 +25,11 @@ def on_message(mqtt, userdata, msg):
 
     influxdb.write_points(influxdb_msg)
 
-mqtt = mqtt.Client()
-mqtt.on_connect = on_connect
-mqtt.on_message = on_message
+mqttc = mqtt.Client()
+mqttc.on_connect = on_connect
+mqttc.on_message = on_message
+mqttc.connect("localhost")
 
-mqtt.connect("localhost")
 influxdb = InfluxDBClient('metrum.ijs.si', 8086, 'pmc', 'PMC.meritve.param', 'pmc')
 
-mqtt.loop_forever()
+mqttc.loop_forever()
