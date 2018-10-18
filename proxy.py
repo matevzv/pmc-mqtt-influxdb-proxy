@@ -30,6 +30,6 @@ mqttc.on_connect = on_connect
 mqttc.on_message = on_message
 mqttc.connect("localhost")
 
-influxdb = InfluxDBClient('metrum.ijs.si', 8086, 'pmc', 'PMC.meritve.param', 'pmc')
+influxdb = InfluxDBClient('localhost', 8086, 'pmc', 'secret', 'pmc')
 
 mqttc.loop_forever()
