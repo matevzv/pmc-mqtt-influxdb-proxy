@@ -24,7 +24,7 @@ def on_message(mqttc, userdata, msg):
     influxdb_msg[0]["tags"] = {"host": node_id}
     influxdb_msg[0]["fields"] = data
 
-    await influxdb.write_points(influxdb_msg)
+    asyncio.create_task(influxdb.write_points(influxdb_msg))
 
 mqttc = mqtt.Client()
 mqttc.on_connect = on_connect
