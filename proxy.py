@@ -29,6 +29,7 @@ mqttc = mqtt.Client()
 mqttc.on_connect = on_connect
 mqttc.on_message = on_message
 mqttc.connect("localhost")
+mqttc.loop_start()
 
 influxdb = InfluxDBClient('localhost', 8086, 'pmc', 'secret', 'pmc')
 
