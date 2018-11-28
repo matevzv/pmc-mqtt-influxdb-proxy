@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import json
+import asyncio
 import paho.mqtt.client as mqtt
 from influxdb import InfluxDBClient
 
@@ -23,13 +24,12 @@ def on_message(mqttc, userdata, msg):
     influxdb_msg[0]["tags"] = {"host": node_id}
     influxdb_msg[0]["fields"] = data
 
-    influxdb.write_points(influxdb_msg)
+    await influxdb.write_points(influxdb_msg)
 
 mqttc = mqtt.Client()
 mqttc.on_connect = on_connect
 mqttc.on_message = on_message
 mqttc.connect("localhost")
-mqttc.loop_start()
 
 influxdb = InfluxDBClient('localhost', 8086, 'pmc', 'secret', 'pmc')
 
