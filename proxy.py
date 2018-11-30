@@ -31,7 +31,11 @@ def fwd_data(q):
         influxdb_msg[0]["tags"] = {"host": node_id}
         influxdb_msg[0]["fields"] = data
 
-        influxdb.write_points(influxdb_msg)
+        try:
+            influxdb.write_points(influxdb_msg)
+        except:
+            influxdb = InfluxDBClient('localhost', 8086, 'pmc', 'secret', 'pmc')
+            pass
 
 q = Queue()
 Process(target=fwd_data, args=(q,)).start()
