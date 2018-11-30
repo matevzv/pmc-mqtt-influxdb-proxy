@@ -10,14 +10,14 @@ def on_connect(mqttc, userdata, flags, rc):
     mqttc.subscribe("pmc/+")
 
 def on_message(mqttc, userdata, msg):
-    q.put_nowait(msg)
+    q.put_nowait(msg.payload())
 
 def fwd_data(q):
     influxdb = InfluxDBClient('localhost', 8086, 'pmc', 'secret', 'pmc')
 
     while True:
         msg = q.get()
-        data = json.loads(msg.payload.decode('utf-8'))
+        data = json.loads(msg.decode('utf-8'))
         node_id = data["node_id"]
         ts = data["ts"]
         del data["node_id"]
