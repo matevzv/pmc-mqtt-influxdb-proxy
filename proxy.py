@@ -34,6 +34,7 @@ def fwd_data(q):
         try:
             influxdb.write_points(influxdb_msg)
         except:
+            print("InfluxDBClient error")
             influxdb = InfluxDBClient('localhost', 8086, 'pmc', 'secret', 'pmc')
             pass
 
