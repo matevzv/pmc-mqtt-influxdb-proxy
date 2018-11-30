@@ -10,7 +10,7 @@ def on_connect(mqttc, userdata, flags, rc):
     mqttc.subscribe("pmc/+")
 
 def on_message(mqttc, userdata, msg):
-    q.put_nowait(msg.payload())
+    q.put_nowait(msg.payload)
 
 def fwd_data(q):
     influxdb = InfluxDBClient('localhost', 8086, 'pmc', 'secret', 'pmc')
