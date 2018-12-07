@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 import json
 import paho.mqtt.client as mqtt
 from influxdb import InfluxDBClient
@@ -34,9 +35,7 @@ def fwd_data(q):
         try:
             influxdb.write_points(influxdb_msg)
         except:
-            print("InfluxDB client error, restarting ...")
-            influxdb = InfluxDBClient('localhost', 8086, 'pmc', 'secret', 'pmc')
-            pass
+            sys.exit("InfluxDB client error, restarting ...")
 
 q = Queue()
 Process(target=fwd_data, args=(q,)).start()
