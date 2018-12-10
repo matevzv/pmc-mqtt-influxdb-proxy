@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-import sys
+import os
 import json
+import signal
 import paho.mqtt.client as mqtt
 from influxdb import InfluxDBClient
 from multiprocessing import Process, Queue
@@ -13,7 +14,7 @@ def on_connect(mqttc, userdata, flags, rc):
 def on_message(mqttc, userdata, msg):
     q.put_nowait(msg.payload)
 
-def fwd_data(q):
+def fwd_data(q, pid):
     influxdb = InfluxDBClient('localhost', 8086, 'pmc', 'secret', 'pmc')
 
     while True:
@@ -35,10 +36,15 @@ def fwd_data(q):
         try:
             influxdb.write_points(influxdb_msg)
         except:
-            sys.exit("InfluxDB client error, restarting ...")
+            print("InfluxDB client error, restarting ...")
+            os.kill(pid, signal.SIGTERM)
+
+pid = os.getpid()
 
 q = Queue()
-Process(target=fwd_data, args=(q,)).start()
+p = Process(target=fwd_data, args=(q, pid,))
+p.daemon == True
+p.start()
 
 mqttc = mqtt.Client()
 mqttc.on_connect = on_connect
