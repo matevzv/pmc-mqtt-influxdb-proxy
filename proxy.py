@@ -53,6 +53,11 @@ p.start()
 mqttc = mqtt.Client()
 mqttc.on_connect = on_connect
 mqttc.on_message = on_message
-mqttc.connect("localhost")
+
+try:
+    mqttc.connect("localhost")
+except:
+    print("MQTT client error, restarting ...")
+    os.kill(pid, signal.SIGTERM)
 
 mqttc.loop_forever()
