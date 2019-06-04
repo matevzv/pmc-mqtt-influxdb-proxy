@@ -19,7 +19,6 @@ def on_message(mqttc, userdata, msg):
         os.kill(pid, signal.SIGTERM)
 
 def fwd_data(q, pid):
-    influxdb = InfluxDBClient('localhost', 8086, 'pmc', 'secret', 'pmc')
 
     while True:
         try:
@@ -38,7 +37,8 @@ def fwd_data(q, pid):
             influxdb_msg[0]["tags"] = {"host": node_id}
             influxdb_msg[0]["fields"] = data
 
-            influxdb.write_points(influxdb_msg)
+            influxdb = InfluxDBClient('localhost', 8086, 'pmc', 'secret', 'pmc')
+            influxdb.write_points(influxdb_msg, time_precision='ms')
         except:
             print("InfluxDB client error, restarting ...")
             os.kill(pid, signal.SIGTERM)
