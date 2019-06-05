@@ -45,7 +45,7 @@ def fwd_data(q, pid):
 
 pid = os.getpid()
 
-q = multiprocessing.Queue(1000)
+q = multiprocessing.Queue(10000)
 p = multiprocessing.Process(target=fwd_data, args=(q, pid,))
 p.daemon == True
 p.start()
