@@ -33,7 +33,7 @@ def fwd_data(q, pid):
                 data[field] = float(data[field])
 
             influxdb_msg = [{"measurement": "pmc_data"}]
-            influxdb_msg[0]["timestamp"] = ts
+            influxdb_msg[0]["time"] = ts
             influxdb_msg[0]["tags"] = {"host": node_id}
             influxdb_msg[0]["fields"] = data
 
